@@ -20,3 +20,58 @@ export const signInSchema = z.object({
 })
 
 export type SignInInput = z.infer<typeof signInSchema>
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email(),
+})
+
+export type ForgotPasswordInput = z.infer<typeof forgotPasswordSchema>
+
+const APPLICATION_AMOUNT_MIN = 500
+const APPLICATION_AMOUNT_MAX = 15000
+const APPLICATION_TERM_MIN_MONTHS = 1
+const APPLICATION_TERM_MAX_MONTHS = 6
+const SA_ID_NUMBER_PATTERN = /^\d{13}$/
+const SA_PHONE_NUMBER_PATTERN = /^(\+27|0)\d{9}$/
+
+export const applicationAmountTermSchema = z.object({
+  amount: z.number().min(APPLICATION_AMOUNT_MIN).max(APPLICATION_AMOUNT_MAX),
+  termMonths: z
+    .number()
+    .min(APPLICATION_TERM_MIN_MONTHS)
+    .max(APPLICATION_TERM_MAX_MONTHS),
+})
+
+export type ApplicationAmountTermInput = z.infer<
+  typeof applicationAmountTermSchema
+>
+
+export const applicationPersonalDetailsSchema = z.object({
+  idNumber: z.string(),
+  // .regex(SA_ID_NUMBER_PATTERN, 'Enter a valid 13-digit SA ID number'),
+  phone: z.string(),
+  // .regex(SA_PHONE_NUMBER_PATTERN, 'Enter a valid SA phone number'),
+  address: z.string().min(5),
+})
+
+export type ApplicationPersonalDetailsInput = z.infer<
+  typeof applicationPersonalDetailsSchema
+>
+
+export const applicationIncomeExpensesSchema = z.object({
+  employer: z.string().min(2),
+  monthlyIncome: z.number().min(0),
+  monthlyExpenses: z.number().min(0),
+})
+
+export type ApplicationIncomeExpensesInput = z.infer<
+  typeof applicationIncomeExpensesSchema
+>
+
+export const applicationSchema = z.object({
+  ...applicationAmountTermSchema.shape,
+  ...applicationPersonalDetailsSchema.shape,
+  ...applicationIncomeExpensesSchema.shape,
+})
+
+export type ApplicationInput = z.infer<typeof applicationSchema>

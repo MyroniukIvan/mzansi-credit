@@ -20,7 +20,10 @@ const fraunces = Fraunces({
 })
 
 export const metadata: Metadata = {
-  title: 'MzansiCredit — Fast, fair micro-loans for Mzansi',
+  title: {
+    default: 'MzansiCredit — Fast, fair micro-loans for Mzansi',
+    template: '%s — MzansiCredit',
+  },
   description:
     'Apply online for a short-term loan from R500 to R15,000. Instant decisioning, transparent fees, and money paid out in minutes after approval.',
 }

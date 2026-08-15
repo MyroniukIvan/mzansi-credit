@@ -15,6 +15,7 @@ import { Input } from '@/components/ui/input'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Routes } from '@/config/routes'
+import { LegalSectionIds } from '@/config/legal-section-ids'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SignUpInput, signUpSchema } from 'shared'
@@ -161,7 +162,14 @@ export function RegisterForm({
       </Card>
       <FieldDescription className="px-6 text-center">
         By creating an account, you agree to our{' '}
-        <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+        <Link href={`${Routes.LEGAL}#${LegalSectionIds.TERMS}`}>
+          Terms of Service
+        </Link>{' '}
+        and{' '}
+        <Link href={`${Routes.LEGAL}#${LegalSectionIds.PRIVACY}`}>
+          Privacy Policy
+        </Link>
+        .
       </FieldDescription>
     </div>
   )

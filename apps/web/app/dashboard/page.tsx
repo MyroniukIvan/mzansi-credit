@@ -1,26 +1,24 @@
-'use client'
-import React from 'react'
-import { authClient } from '@/config/auth.client'
-import { Card, CardContent } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import type { Metadata } from 'next'
+import { GreetingSection } from '@/components/dashboard/greeting-section'
+import { LoansCard } from '@/components/dashboard/loans-card'
+import { ApplicationsCard } from '@/components/dashboard/applications-card'
+import { BorrowingPowerTeaser } from '@/components/dashboard/borrowing-power-teaser'
 
-const DashboardPage = () => {
-  const { data } = authClient.useSession()
-
-  if (!data?.user) return
-
-  const handleLogout = async () => {
-    return await authClient.signOut()
-  }
-
-  return (
-    <Card>
-      <CardContent>
-        <p>{data.user.name}</p>
-      </CardContent>
-      <Button onClick={handleLogout}>Logout</Button>
-    </Card>
-  )
+export const metadata: Metadata = {
+  title: 'Dashboard',
 }
 
-export default DashboardPage
+export default function DashboardPage() {
+  return (
+    <div className="flex flex-col gap-8">
+      <GreetingSection />
+      <div className="grid gap-6 lg:grid-cols-[1.6fr_1fr]">
+        <div className="flex flex-col gap-6">
+          <LoansCard />
+          <ApplicationsCard />
+        </div>
+        <BorrowingPowerTeaser />
+      </div>
+    </div>
+  )
+}

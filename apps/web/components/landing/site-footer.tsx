@@ -1,11 +1,21 @@
 import Link from 'next/link'
 import { Routes } from '@/config/routes'
+import { LegalSectionIds } from '@/config/legal-section-ids'
 
 const FOOTER_LINKS = [
-  { href: '#', label: 'Privacy policy' },
-  { href: '#', label: 'Terms & conditions' },
-  { href: '#', label: 'Complaints process' },
-  { href: '#', label: 'Contact us' },
+  {
+    href: `${Routes.LEGAL}#${LegalSectionIds.PRIVACY}`,
+    label: 'Privacy policy',
+  },
+  {
+    href: `${Routes.LEGAL}#${LegalSectionIds.TERMS}`,
+    label: 'Terms & conditions',
+  },
+  {
+    href: `${Routes.LEGAL}#${LegalSectionIds.COMPLAINTS}`,
+    label: 'Complaints process',
+  },
+  { href: `${Routes.LEGAL}#${LegalSectionIds.CONTACT}`, label: 'Contact us' },
 ]
 
 export function SiteFooter() {
@@ -28,13 +38,13 @@ export function SiteFooter() {
 
           <nav className="flex flex-wrap gap-x-8 gap-y-3 text-sm text-muted-foreground">
             {FOOTER_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
                 className="transition-colors hover:text-foreground"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
         </div>

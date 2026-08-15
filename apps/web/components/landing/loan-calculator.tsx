@@ -15,7 +15,11 @@ import { Slider } from '@/components/ui/slider'
 const DEFAULT_AMOUNT = 5000
 const DEFAULT_TERM_MONTHS = 3
 
-export function LoanCalculator() {
+interface LoanCalculatorProps {
+  compact?: boolean
+}
+
+export function LoanCalculator({ compact = false }: LoanCalculatorProps = {}) {
   const [amount, setAmount] = useState(DEFAULT_AMOUNT)
   const [termMonths, setTermMonths] = useState(DEFAULT_TERM_MONTHS)
 
@@ -33,7 +37,14 @@ export function LoanCalculator() {
   }
 
   return (
-    <div className="relative rounded-3xl bg-card p-7 text-card-foreground shadow-2xl shadow-black/40 ring-1 ring-black/5 sm:p-8 lg:-translate-y-2 lg:translate-x-2">
+    <div
+      className={cn(
+        'relative rounded-3xl bg-card text-card-foreground ring-1 ring-black/5',
+        compact
+          ? 'p-5 shadow-sm'
+          : 'p-7 shadow-2xl shadow-black/40 sm:p-8 lg:-translate-y-2 lg:translate-x-2'
+      )}
+    >
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-semibold text-foreground">
@@ -101,7 +112,12 @@ export function LoanCalculator() {
         <p className="text-xs font-medium text-muted-foreground">
           Indicative monthly payment
         </p>
-        <p className="font-heading text-4xl font-medium text-foreground">
+        <p
+          className={cn(
+            'font-heading font-medium text-foreground',
+            compact ? 'text-3xl' : 'text-4xl'
+          )}
+        >
           {formatRand(quote.monthlyInstallment)}
         </p>
         <div className="mt-3 flex items-center justify-between border-t border-border/70 pt-3 text-xs text-muted-foreground">
@@ -112,10 +128,12 @@ export function LoanCalculator() {
         </div>
       </div>
 
-      <p className="mt-4 text-[0.7rem] leading-relaxed text-muted-foreground">
-        Indicative only — your final quote depends on an affordability
-        assessment and is confirmed before you sign.
-      </p>
+      {compact ? null : (
+        <p className="mt-4 text-[0.7rem] leading-relaxed text-muted-foreground">
+          Indicative only — your final quote depends on an affordability
+          assessment and is confirmed before you sign.
+        </p>
+      )}
     </div>
   )
 }

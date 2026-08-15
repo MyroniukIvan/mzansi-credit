@@ -16,6 +16,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { Routes } from '@/config/routes'
+import { LegalSectionIds } from '@/config/legal-section-ids'
 import { authClient } from '@/config/auth.client'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -140,21 +141,34 @@ export function LoginForm({ className, redirectTo, ...props }: LoginFormProps) {
               </FieldDescription>
             </FieldGroup>
           </form>
-          <div className="relative hidden bg-muted md:block">
+          <div className="relative hidden bg-brand-ink md:block">
             <Image
               width="500"
               height="500"
               loading="eager"
               src="/login.jpeg"
               alt="Image"
-              className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+              className="absolute inset-0 h-full w-full object-cover opacity-60 mix-blend-luminosity"
             />
+            <div className="absolute inset-0 bg-gradient-to-t from-brand-ink via-brand-ink/70 to-brand-ink/20" />
+            <div className="absolute inset-x-0 bottom-0 p-6">
+              <p className="font-heading text-xl font-medium text-brand-ink-foreground">
+                Money when Mzansi needs it.
+              </p>
+            </div>
           </div>
         </CardContent>
       </Card>
       <FieldDescription className="px-6 text-center">
-        By continuing, you agree to our <a href="#">Terms of Service</a> and{' '}
-        <a href="#">Privacy Policy</a>.
+        By continuing, you agree to our{' '}
+        <Link href={`${Routes.LEGAL}#${LegalSectionIds.TERMS}`}>
+          Terms of Service
+        </Link>{' '}
+        and{' '}
+        <Link href={`${Routes.LEGAL}#${LegalSectionIds.PRIVACY}`}>
+          Privacy Policy
+        </Link>
+        .
       </FieldDescription>
     </div>
   )
