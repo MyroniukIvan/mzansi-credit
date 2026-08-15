@@ -3,7 +3,9 @@ import { LoginForm } from '@/components/auth/login-form'
 export default async function LoginPage({ searchParams }: PageProps<'/login'>) {
   const { redirect } = await searchParams
   const redirectTo =
-    typeof redirect === 'string' && redirect.startsWith('/') && !redirect.startsWith('//')
+    typeof redirect === 'string' &&
+    redirect.startsWith('/') &&
+    !redirect.startsWith('//')
       ? redirect
       : undefined
 
