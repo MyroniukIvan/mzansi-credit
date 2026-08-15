@@ -1,6 +1,7 @@
 node_modules
 dist
 packages/db/src/generated
+next-env.d.ts
 .next
 .turbo
 coverage
