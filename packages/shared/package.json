@@ -6,12 +6,17 @@
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "scripts": {
-    "build": "",
+    "build": "tsc",
     "dev": "tsc --watch --preserveWatchOutput",
     "check-types": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module"
+  "devDependencies": {
+    "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  }
 }
