@@ -7,23 +7,37 @@ import {
 import { PrismaClient } from 'db'
 import { ApplicationInput, ApplicationSummary } from 'shared'
 import { PRISMA } from '../core/prisma/prisma.module'
+import { ScoringService } from '../scoring/scoring.service'
 
 const CENTS_PER_RAND = 100
 
 @Injectable()
 export class ApplicationsService {
-  constructor(@Inject(PRISMA) private readonly prisma: PrismaClient) {}
+  constructor(
+    @Inject(PRISMA) private readonly prisma: PrismaClient,
+    private readonly scoringService: ScoringService
+  ) {}
 
   async create(
     userId: string,
     applicantName: string,
     input: ApplicationInput
   ): Promise<ApplicationSummary> {
+    const amountCents = input.amount * CENTS_PER_RAND
     const product = await this.prisma.loanProduct.findFirst({
-      where: { isActive: true },
+      where: {
+        isActive: true,
+        minAmountCents: { lte: amountCents },
+        maxAmountCents: { gte: amountCents },
+        minTermMonths: { lte: input.termMonths },
+        maxTermMonths: { gte: input.termMonths },
+      },
+      orderBy: { monthlyInterestBps: 'asc' },
     })
     if (!product) {
-      throw new UnprocessableEntityException('No active loan product')
+      throw new UnprocessableEntityException(
+        'No loan product matches the requested amount and term'
+      )
     }
 
     const application = await this.prisma.$transaction(async (tx) => {
@@ -33,7 +47,7 @@ export class ApplicationsService {
           productId: product.id,
           status: 'submitted',
           submittedAt: new Date(),
-          amountCents: input.amount * CENTS_PER_RAND,
+          amountCents,
           termMonths: input.termMonths,
           idNumber: input.idNumber,
           phone: input.phone,
@@ -63,6 +77,8 @@ export class ApplicationsService {
 
       return created
     })
+
+    await this.scoringService.enqueue(application.id)
 
     return {
       id: application.id,

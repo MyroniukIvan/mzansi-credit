@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { DOCUMENT_TYPES } from './types'
 
 export const signUpSchema = z
   .object({
@@ -75,3 +76,18 @@ export const applicationSchema = z.object({
 })
 
 export type ApplicationInput = z.infer<typeof applicationSchema>
+
+const DOCUMENT_MAX_SIZE_BYTES = 10 * 1024 * 1024
+const DOCUMENT_MIME_TYPES = [
+  'application/pdf',
+  'image/jpeg',
+  'image/png',
+] as const
+
+export const documentUploadSchema = z.object({
+  type: z.enum(DOCUMENT_TYPES),
+  mimeType: z.enum(DOCUMENT_MIME_TYPES),
+  sizeBytes: z.number().int().positive().max(DOCUMENT_MAX_SIZE_BYTES),
+})
+
+export type DocumentUploadInput = z.infer<typeof documentUploadSchema>

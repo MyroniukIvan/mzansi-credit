@@ -10,6 +10,7 @@
     "check-types": "tsc --noEmit",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
+    "db:seed": "tsx prisma/seed.ts",
     "db:studio": "prisma studio"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
   "devDependencies": {
     "@types/pg": "^8.21.0",
     "prisma": "^7.9.1",
+    "tsx": "^4.23.12",
     "typescript": "^7.0.2"
   }
 }

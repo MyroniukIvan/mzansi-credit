@@ -7,6 +7,8 @@ import { RolesGuard } from './core/guards/roles.guard'
 import { AuthGuard } from './core/guards/auth.guard'
 import { ApplicationsModule } from './applications/applications.module'
 import { PrismaModule } from './core/prisma/prisma.module'
+import { ProductsModule } from './products/products.module'
+import { DocumentsModule } from './documents/documents.module'
 
 @Module({
   imports: [
@@ -15,6 +17,8 @@ import { PrismaModule } from './core/prisma/prisma.module'
     }),
     PrismaModule,
     ApplicationsModule,
+    ProductsModule,
+    DocumentsModule,
   ],
   controllers: [AppController],
   providers: [
