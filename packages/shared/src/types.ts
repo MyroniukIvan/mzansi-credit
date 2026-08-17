@@ -26,3 +26,18 @@ export interface ApplicationSummary {
 
 export const DOCUMENT_STATUSES = ['pending', 'verified', 'rejected'] as const
 export type DocumentStatus = (typeof DOCUMENT_STATUSES)[number]
+
+export const LOAN_STATUSES = ['active', 'closed', 'defaulted'] as const
+export type LoanStatus = Extract<
+  ApplicationStatus,
+  (typeof LOAN_STATUSES)[number]
+>
+
+export const INSTALLMENT_STATUSES = ['pending', 'paid', 'overdue'] as const
+export type InstallmentStatus = (typeof INSTALLMENT_STATUSES)[number]
+
+export const PAYMENT_STATUSES = ['pending', 'succeeded', 'failed'] as const
+export type PaymentStatus = (typeof PAYMENT_STATUSES)[number]
+
+export const DOCUMENT_TYPES = ['sa_id', 'proof_of_income'] as const
+export type DocumentType = (typeof DOCUMENT_TYPES)[number]

@@ -33,20 +33,21 @@
 
 ## Епіки
 
-### Епік 0 — Bootstrap
-
-- Turborepo: `apps/web` (Next.js), `apps/api` (NestJS+Fastify), `packages/db` (Prisma), `packages/shared` (zod-схеми, типи).
-- `docker-compose.yml`: postgres, valkey, minio.
-- ESLint + Prettier + tsconfig base; `turbo run lint typecheck build`.
-- GitHub Actions: lint + typecheck на PR.
-- **Вивчити:** turborepo pipeline, pnpm workspaces, docker compose networking.
-
-### Епік 1 — Auth і ролі
-
-- better-auth: email+password і Google OAuth, сесії у Valkey.
-- Ролі `client` / `underwriter` / `admin`; NestJS guard по ролі; middleware у Next.js для захищених роутів.
-- Сторінки login/register на shadcn/ui + RHF + Zod.
-- **Вивчити:** better-auth, OIDC-флоу, NestJS guards.
+[//]: #
+[//]: # '### Епік 0 — Bootstrap'
+[//]: #
+[//]: # '- Turborepo: `apps/web` (Next.js), `apps/api` (NestJS+Fastify), `packages/db` (Prisma), `packages/shared` (zod-схеми, типи).'
+[//]: # '- `docker-compose.yml`: postgres, valkey, minio.'
+[//]: # '- ESLint + Prettier + tsconfig base; `turbo run lint typecheck build`.'
+[//]: # '- GitHub Actions: lint + typecheck на PR.'
+[//]: # '- **Вивчити:** turborepo pipeline, pnpm workspaces, docker compose networking.'
+[//]: #
+[//]: # '### Епік 1 — Auth і ролі'
+[//]: #
+[//]: # '- better-auth: email+password і Google OAuth, сесії у Valkey.'
+[//]: # '- Ролі `client` / `underwriter` / `admin`; NestJS guard по ролі; middleware у Next.js для захищених роутів.'
+[//]: # '- Сторінки login/register на shadcn/ui + RHF + Zod.'
+[//]: # '- **Вивчити:** better-auth, OIDC-флоу, NestJS guards.'
 
 ### Епік 2 — Доменне ядро (Prisma-схема)
 

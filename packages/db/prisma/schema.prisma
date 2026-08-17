@@ -25,6 +25,10 @@ model User {
   banReason  String?
   banExpires DateTime?
 
+  applications LoanApplication[]
+  loans        Loan[]
+  documents    Document[]
+
   @@unique([email])
   @@map("user")
 }
@@ -77,4 +81,197 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+enum ApplicationStatus {
+  draft
+  submitted
+  scoring
+  manual_review
+  approved
+  rejected
+  disbursed
+  active
+  closed
+  defaulted
+}
+
+enum LoanStatus {
+  active
+  closed
+  defaulted
+}
+
+enum InstallmentStatus {
+  pending
+  paid
+  overdue
+}
+
+enum PaymentStatus {
+  pending
+  succeeded
+  failed
+}
+
+enum PaymentProvider {
+  stripe
+  mock
+}
+
+enum DocumentType {
+  sa_id
+  proof_of_income
+}
+
+enum DocumentStatus {
+  pending
+  verified
+  rejected
+}
+
+model LoanProduct {
+  id                   String            @id @default(cuid())
+  name                 String
+  minAmountCents       Int
+  maxAmountCents       Int
+  minTermMonths        Int
+  maxTermMonths        Int
+  monthlyInterestBps   Int
+  initiationFeeBps     Int
+  monthlyServiceFeeCents Int
+  isActive             Boolean           @default(true)
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @updatedAt
+  applications         LoanApplication[]
+
+  @@map("loan_product")
+}
+
+model LoanApplication {
+  id             String            @id @default(cuid())
+  userId         String
+  user           User              @relation(fields: [userId], references: [id], onDelete: Restrict)
+  productId      String
+  product        LoanProduct       @relation(fields: [productId], references: [id], onDelete: Restrict)
+  status         ApplicationStatus @default(draft)
+  amountCents    Int
+  termMonths     Int
+  idNumber       String?
+  phone          String?
+  address        String?
+  incomeCents    Int?
+  expensesCents  Int?
+  employer       String?
+  score          Int?
+  decisionReason String?
+  reviewedById   String?
+  submittedAt    DateTime?
+  decidedAt      DateTime?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  loan           Loan?
+  documents      Document[]
+
+  @@index([userId])
+  @@index([status, submittedAt])
+  @@map("loan_application")
+}
+
+model Loan {
+  id                 String          @id @default(cuid())
+  applicationId      String          @unique
+  application        LoanApplication @relation(fields: [applicationId], references: [id], onDelete: Restrict)
+  userId             String
+  user               User            @relation(fields: [userId], references: [id], onDelete: Restrict)
+  status             LoanStatus      @default(active)
+  principalCents     Int
+  monthlyInterestBps Int
+  termMonths         Int
+  disbursedAt        DateTime
+  closedAt           DateTime?
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @updatedAt
+  installments       Installment[]
+  payments           Payment[]
+
+  @@index([userId])
+  @@index([status])
+  @@map("loan")
+}
+
+model Installment {
+  id             String            @id @default(cuid())
+  loanId         String
+  loan           Loan              @relation(fields: [loanId], references: [id], onDelete: Restrict)
+  sequence       Int
+  dueDate        DateTime
+  principalCents Int
+  interestCents  Int
+  feeCents       Int
+  status         InstallmentStatus @default(pending)
+  paidAt         DateTime?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  payments       Payment[]
+
+  @@unique([loanId, sequence])
+  @@index([status, dueDate])
+  @@map("installment")
+}
+
+model Payment {
+  id                String          @id @default(cuid())
+  loanId            String
+  loan              Loan            @relation(fields: [loanId], references: [id], onDelete: Restrict)
+  installmentId     String?
+  installment       Installment?    @relation(fields: [installmentId], references: [id], onDelete: Restrict)
+  provider          PaymentProvider
+  providerPaymentId String?         @unique
+  status            PaymentStatus   @default(pending)
+  amountCents       Int
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+
+  @@index([loanId])
+  @@index([installmentId])
+  @@map("payment")
+}
+
+model Document {
+  id              String           @id @default(cuid())
+  userId          String
+  user            User             @relation(fields: [userId], references: [id], onDelete: Restrict)
+  applicationId   String?
+  application     LoanApplication? @relation(fields: [applicationId], references: [id], onDelete: SetNull)
+  type            DocumentType
+  status          DocumentStatus   @default(pending)
+  s3Key           String
+  mimeType        String
+  sizeBytes       Int
+  reviewedById    String?
+  rejectionReason String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@index([userId])
+  @@index([applicationId])
+  @@index([status])
+  @@map("document")
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  entityType String
+  entityId   String
+  action     String
+  fromStatus String?
+  toStatus   String?
+  metadata   Json?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([actorId])
+  @@map("audit_log")
 }
