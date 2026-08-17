@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getSessionCookie } from 'better-auth/cookies'
 import { Routes } from '@/config/routes'
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const sessionCookie = getSessionCookie(req)
   const pathname = req.nextUrl.pathname
   const isAuthOnlyPath =

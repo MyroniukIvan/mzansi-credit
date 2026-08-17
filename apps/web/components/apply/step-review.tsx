@@ -1,23 +1,22 @@
 'use client'
 
-import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { ApplicationInput } from 'shared'
 import { Button } from '@/components/ui/button'
 import { formatRand } from '@/lib/currency'
+import { useSubmitApplication } from '@/features/applications/use-applications'
+import { clearApplicationDraft } from '@/features/applications/application-draft-storage'
+import { Routes } from '@/config/routes'
+import { toast } from 'sonner'
 
 interface StepReviewProps {
   draft: ApplicationInput
   onBack: () => void
 }
 
-async function handleApplicationSubmit(
-  values: ApplicationInput
-): Promise<void> {
-  // TODO: submit application to the applications API
-}
-
 export function StepReview({ draft, onBack }: StepReviewProps) {
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const router = useRouter()
+  const { mutateAsync: submitApplication, isPending } = useSubmitApplication()
 
   const summaryRows = [
     { label: 'Loan amount', value: formatRand(draft.amount) },
@@ -34,9 +33,14 @@ export function StepReview({ draft, onBack }: StepReviewProps) {
   ]
 
   async function handleSubmitClick() {
-    setIsSubmitting(true)
-    await handleApplicationSubmit(draft)
-    setIsSubmitting(false)
+    try {
+      await submitApplication(draft)
+      clearApplicationDraft()
+      toast.success('Application submitted')
+      router.push(Routes.APPLICATIONS)
+    } catch {
+      toast.error('Could not submit your application. Please try again.')
+    }
   }
 
   return (
@@ -66,12 +70,8 @@ export function StepReview({ draft, onBack }: StepReviewProps) {
         <Button type="button" variant="outline" onClick={onBack}>
           Back
         </Button>
-        <Button
-          type="button"
-          onClick={handleSubmitClick}
-          disabled={isSubmitting}
-        >
-          {isSubmitting ? 'Submitting…' : 'Submit application'}
+        <Button type="button" onClick={handleSubmitClick} disabled={isPending}>
+          {isPending ? 'Submitting…' : 'Submit application'}
         </Button>
       </div>
     </div>

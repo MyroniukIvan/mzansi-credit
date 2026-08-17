@@ -16,7 +16,12 @@ export function ApplicationCard({ application }: ApplicationCardProps) {
             {formatRand(application.amount)} · {application.termMonths} months
           </p>
           <p className="text-xs text-muted-foreground">
-            Submitted {application.submittedAt}
+            Submitted{' '}
+            {new Date(application.submittedAt).toLocaleDateString('en-ZA', {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric',
+            })}
           </p>
         </div>
         <ApplicationStatusBadge status={application.status} />

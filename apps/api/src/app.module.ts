@@ -5,12 +5,16 @@ import { ConfigModule } from '@nestjs/config'
 import { APP_GUARD } from '@nestjs/core'
 import { RolesGuard } from './core/guards/roles.guard'
 import { AuthGuard } from './core/guards/auth.guard'
+import { ApplicationsModule } from './applications/applications.module'
+import { PrismaModule } from './core/prisma/prisma.module'
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '../../.env',
     }),
+    PrismaModule,
+    ApplicationsModule,
   ],
   controllers: [AppController],
   providers: [
