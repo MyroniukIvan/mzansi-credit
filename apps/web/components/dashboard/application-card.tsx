@@ -12,7 +12,7 @@ interface ApplicationCardProps {
 export function ApplicationCard({ application }: ApplicationCardProps) {
   return (
     <Link
-      href={`${Routes.APPLICATIONS}/${application.id}`}
+      href={Routes.APPLICATION_DETAIL(application.id)}
       className="block transition-opacity hover:opacity-80"
     >
       <Card>

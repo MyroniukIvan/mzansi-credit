@@ -11,6 +11,8 @@ import { ProductsModule } from './products/products.module'
 import { DocumentsModule } from './documents/documents.module'
 import { LoansModule } from './loans/loans.module'
 import { OfficeModule } from './office/office.module'
+import { PaymentsModule } from './payments/payments.module'
+import { OverdueModule } from './core/queue/overdue.module'
 
 @Module({
   imports: [
@@ -23,6 +25,8 @@ import { OfficeModule } from './office/office.module'
     DocumentsModule,
     LoansModule,
     OfficeModule,
+    PaymentsModule,
+    OverdueModule,
   ],
   controllers: [AppController],
   providers: [

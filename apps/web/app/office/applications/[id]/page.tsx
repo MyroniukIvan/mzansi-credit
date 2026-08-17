@@ -22,9 +22,9 @@ export default async function OfficeApplicationDetailPage(
           {id}
         </h1>
       </div>
-      <ApplicantInfoSection />
-      <OfficeDocumentsSection />
-      <DecisionPanel />
+      <ApplicantInfoSection id={id} />
+      <OfficeDocumentsSection id={id} />
+      <DecisionPanel id={id} />
     </div>
   )
 }

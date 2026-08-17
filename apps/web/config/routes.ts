@@ -6,6 +6,8 @@ export const Routes = {
   DASHBOARD: '/dashboard',
   APPLY: '/apply',
   APPLICATIONS: '/dashboard/applications',
+  APPLICATION_DETAIL: (id: string) => `/dashboard/applications/${id}`,
+  LOAN_DETAIL: (id: string) => `/dashboard/loans/${id}`,
   DOCUMENTS: '/dashboard/documents',
   OFFICE: '/office',
   OFFICE_APPLICATION: (id: string) => `/office/applications/${id}`,
