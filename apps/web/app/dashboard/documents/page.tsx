@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { DocumentUploadDropzone } from '@/components/dashboard/document-upload-dropzone'
 import { RequiredDocumentsList } from '@/components/dashboard/required-documents-list'
 
 export const metadata: Metadata = {
@@ -17,7 +16,6 @@ export default function DocumentsPage() {
           Upload the documents we need to verify your identity and income.
         </p>
       </div>
-      <DocumentUploadDropzone />
       <div className="flex flex-col gap-3">
         <h2 className="text-sm font-semibold text-foreground">
           Required documents

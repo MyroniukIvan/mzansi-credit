@@ -9,6 +9,8 @@ import { ApplicationsModule } from './applications/applications.module'
 import { PrismaModule } from './core/prisma/prisma.module'
 import { ProductsModule } from './products/products.module'
 import { DocumentsModule } from './documents/documents.module'
+import { LoansModule } from './loans/loans.module'
+import { OfficeModule } from './office/office.module'
 
 @Module({
   imports: [
@@ -19,6 +21,8 @@ import { DocumentsModule } from './documents/documents.module'
     ApplicationsModule,
     ProductsModule,
     DocumentsModule,
+    LoansModule,
+    OfficeModule,
   ],
   controllers: [AppController],
   providers: [

@@ -120,7 +120,40 @@ export class ApplicationsService {
   async findOneForUser(userId: string, id: string) {
     const application = await this.prisma.loanApplication.findFirst({
       where: { id, userId },
-      include: { product: true, documents: true },
+      select: {
+        id: true,
+        status: true,
+        amountCents: true,
+        termMonths: true,
+        incomeCents: true,
+        expensesCents: true,
+        score: true,
+        decisionReason: true,
+        submittedAt: true,
+        decidedAt: true,
+        product: {
+          select: {
+            id: true,
+            name: true,
+            minAmountCents: true,
+            maxAmountCents: true,
+            minTermMonths: true,
+            maxTermMonths: true,
+            monthlyInterestBps: true,
+            initiationFeeBps: true,
+            monthlyServiceFeeCents: true,
+          },
+        },
+        documents: {
+          select: {
+            id: true,
+            type: true,
+            status: true,
+            rejectionReason: true,
+            createdAt: true,
+          },
+        },
+      },
     })
     if (!application) throw new NotFoundException()
     return application
