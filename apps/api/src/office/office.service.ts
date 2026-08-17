@@ -4,13 +4,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common'
-import { GetObjectCommand } from '@aws-sdk/client-s3'
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner'
 import { ApplicationStatus, DocumentStatus, PrismaClient } from 'db'
 import { ApplicationStatus as ApplicationStatusType } from 'shared'
-import { s3Client, S3_BUCKET } from '../config/s3.client'
 import { PRISMA } from '../core/prisma/prisma.module'
 import { ScoringDisbursement } from '../scoring/scoring.disbursement'
+import { DocumentsService } from '../documents/documents.service'
 import {
   OfficeDecisionInput,
   OfficeDocumentReviewInput,
@@ -18,13 +16,13 @@ import {
 
 const AUDIT_ENTITY_TYPE_APPLICATION = 'loan_application'
 const AUDIT_ENTITY_TYPE_DOCUMENT = 'document'
-const PRESIGNED_URL_EXPIRY_SECONDS = 300
 
 @Injectable()
 export class OfficeService {
   constructor(
     @Inject(PRISMA) private readonly prisma: PrismaClient,
-    private readonly disbursement: ScoringDisbursement
+    private readonly disbursement: ScoringDisbursement,
+    private readonly documentsService: DocumentsService
   ) {}
 
   async findQueue(status: ApplicationStatusType) {
@@ -112,7 +110,9 @@ export class OfficeService {
         status: document.status,
         rejectionReason: document.rejectionReason,
         createdAt: document.createdAt.toISOString(),
-        downloadUrl: await this.presignDownloadUrl(document.s3Key),
+        downloadUrl: await this.documentsService.presignDownloadUrl(
+          document.s3Key
+        ),
       }))
     )
 
@@ -219,13 +219,5 @@ export class OfficeService {
         },
       })
     })
-  }
-
-  private presignDownloadUrl(s3Key: string): Promise<string> {
-    return getSignedUrl(
-      s3Client,
-      new GetObjectCommand({ Bucket: S3_BUCKET, Key: s3Key }),
-      { expiresIn: PRESIGNED_URL_EXPIRY_SECONDS }
-    )
   }
 }

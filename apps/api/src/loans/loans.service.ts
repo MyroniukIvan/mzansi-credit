@@ -28,7 +28,19 @@ export class LoansService {
   async disburse(applicationId: string): Promise<void> {
     const application = await this.prisma.loanApplication.findUniqueOrThrow({
       where: { id: applicationId },
-      include: { product: true },
+      select: {
+        status: true,
+        userId: true,
+        amountCents: true,
+        termMonths: true,
+        product: {
+          select: {
+            monthlyInterestBps: true,
+            initiationFeeBps: true,
+            monthlyServiceFeeCents: true,
+          },
+        },
+      },
     })
 
     const existingLoan = await this.prisma.loan.findUnique({

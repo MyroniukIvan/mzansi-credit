@@ -41,7 +41,24 @@ export class ScoringWorker implements OnModuleInit, OnModuleDestroy {
 
     const application = await this.prisma.loanApplication.findUniqueOrThrow({
       where: { id: applicationId },
-      include: { product: true },
+      select: {
+        status: true,
+        userId: true,
+        amountCents: true,
+        termMonths: true,
+        incomeCents: true,
+        expensesCents: true,
+        product: {
+          select: {
+            minAmountCents: true,
+            maxAmountCents: true,
+            minTermMonths: true,
+            maxTermMonths: true,
+            monthlyInterestBps: true,
+            monthlyServiceFeeCents: true,
+          },
+        },
+      },
     })
 
     const activeLoan = await this.prisma.loan.findFirst({

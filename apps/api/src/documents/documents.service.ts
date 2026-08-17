@@ -100,12 +100,16 @@ export class DocumentsService implements OnModuleInit {
         status: document.status,
         rejectionReason: document.rejectionReason,
         createdAt: document.createdAt.toISOString(),
-        downloadUrl: await getSignedUrl(
-          s3Client,
-          new GetObjectCommand({ Bucket: S3_BUCKET, Key: document.s3Key }),
-          { expiresIn: PRESIGNED_URL_EXPIRY_SECONDS }
-        ),
+        downloadUrl: await this.presignDownloadUrl(document.s3Key),
       }))
+    )
+  }
+
+  presignDownloadUrl(s3Key: string): Promise<string> {
+    return getSignedUrl(
+      s3Client,
+      new GetObjectCommand({ Bucket: S3_BUCKET, Key: s3Key }),
+      { expiresIn: PRESIGNED_URL_EXPIRY_SECONDS }
     )
   }
 }

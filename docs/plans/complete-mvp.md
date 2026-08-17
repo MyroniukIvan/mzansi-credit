@@ -93,3 +93,10 @@ Wire app.module imports, cross-module DI (scoring→loans disburse, applications
 ### Final gate
 
 riptide:plan-verifier (coverage vs R1–R9) → riptide:reviewer (structural) → fix findings → my full E2E in browser → final commit/push.
+
+## Post-review follow-ups (deferred by reviewer triage)
+
+- Move loans/office/documents response DTOs into packages/shared (like ApplicationSummary) so api and web share one compiler-checked contract.
+- Provide the S3 client through a Nest DI token (S3Module) instead of a module-level singleton, mirroring the PRISMA pattern.
+- Extract a logAudit(tx, ...) helper once a third status-transition module appears.
+- Narrow office decision/review zod enums from the shared unions via Extract instead of inline literals.

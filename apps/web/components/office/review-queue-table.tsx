@@ -7,22 +7,22 @@ import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
-  Row,
   SortingState,
   useReactTable,
 } from '@tanstack/react-table'
 import { ApplicationStatus } from 'shared'
 import { ApplicationStatusBadge } from '@/components/dashboard/application-status-badge'
 import { SortIcon } from '@/components/office/sort-icon'
+import { StatusTabButton } from '@/components/office/status-tab-button'
+import { QueueRow } from '@/components/office/queue-row'
 import { formatRand } from '@/lib/currency'
-import { cn } from '@/lib/utils'
 import { Routes } from '@/config/routes'
 import { OfficeQueueItem, useOfficeQueue } from '@/features/office/use-office'
 
 const CENTS_PER_RAND = 100
 const EMPTY_QUEUE: OfficeQueueItem[] = []
 
-interface QueueStatusTab {
+export interface QueueStatusTab {
   status: ApplicationStatus
   label: string
 }
@@ -79,57 +79,6 @@ const columns: ColumnDef<OfficeQueueItem>[] = [
     cell: ({ row }) => formatSubmittedDate(row.original.submittedAt),
   },
 ]
-
-interface StatusTabButtonProps {
-  tab: QueueStatusTab
-  isActive: boolean
-  onSelect: (status: ApplicationStatus) => void
-}
-
-function StatusTabButton({ tab, isActive, onSelect }: StatusTabButtonProps) {
-  function handleClick() {
-    onSelect(tab.status)
-  }
-
-  return (
-    <button
-      type="button"
-      onClick={handleClick}
-      className={cn(
-        'rounded-full border px-3 py-1.5 text-sm font-medium transition-colors',
-        isActive
-          ? 'border-foreground bg-foreground text-background'
-          : 'border-border bg-background text-muted-foreground hover:text-foreground'
-      )}
-    >
-      {tab.label}
-    </button>
-  )
-}
-
-interface QueueRowProps {
-  row: Row<OfficeQueueItem>
-  onSelect: (id: string) => void
-}
-
-function QueueRow({ row, onSelect }: QueueRowProps) {
-  function handleClick() {
-    onSelect(row.original.id)
-  }
-
-  return (
-    <tr
-      onClick={handleClick}
-      className="cursor-pointer border-t border-border transition-colors hover:bg-muted/40"
-    >
-      {row.getVisibleCells().map((cell) => (
-        <td key={cell.id} className="px-4 py-3">
-          {flexRender(cell.column.columnDef.cell, cell.getContext())}
-        </td>
-      ))}
-    </tr>
-  )
-}
 
 export function ReviewQueueTable() {
   const router = useRouter()

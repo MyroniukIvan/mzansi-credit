@@ -36,9 +36,14 @@ const SA_ID_NUMBER_PATTERN = /^\d{13}$/
 const SA_PHONE_NUMBER_PATTERN = /^(\+27|0)\d{9}$/
 
 export const applicationAmountTermSchema = z.object({
-  amount: z.number().min(APPLICATION_AMOUNT_MIN).max(APPLICATION_AMOUNT_MAX),
+  amount: z
+    .number()
+    .int()
+    .min(APPLICATION_AMOUNT_MIN)
+    .max(APPLICATION_AMOUNT_MAX),
   termMonths: z
     .number()
+    .int()
     .min(APPLICATION_TERM_MIN_MONTHS)
     .max(APPLICATION_TERM_MAX_MONTHS),
 })
@@ -61,8 +66,8 @@ export type ApplicationPersonalDetailsInput = z.infer<
 
 export const applicationIncomeExpensesSchema = z.object({
   employer: z.string().min(2),
-  monthlyIncome: z.number().min(0),
-  monthlyExpenses: z.number().min(0),
+  monthlyIncome: z.number().int().min(0),
+  monthlyExpenses: z.number().int().min(0),
 })
 
 export type ApplicationIncomeExpensesInput = z.infer<
