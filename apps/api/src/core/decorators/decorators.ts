@@ -7,7 +7,6 @@ import {
 import { FastifyRequest } from 'fastify'
 import type { UserRole } from 'shared'
 import type { SessionUser } from '../guards/auth.guard'
-import { ExecutionContextHost } from '@nestjs/core/helpers/execution-context-host'
 
 export const IS_PUBLIC_KEY = 'isPublic'
 export const ROLES_KEY = 'roles'
